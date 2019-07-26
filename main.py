@@ -16,7 +16,12 @@ class Info:
     def __init__(self, id):
         self.id = id
         self.url = '{}/{}/'.format(base_url, id)
-        r = requests.get(self.url)
+        for i in range(5):
+            r = requests.get(self.url)
+            if r.status_code == 200:
+                break
+            else:
+                print('[{}] Bonbon information Retry: {}'.format(r.status_code, i+1))
         soup = BeautifulSoup(r.text, "html.parser")
         info_block = soup.find(id="info")
         title = info_block.find('h1')
@@ -50,11 +55,15 @@ def get_info_job(i):
     def picture_download_job(url, file_path, page):
 
         def download(d_path, d_url):
-            r = requests.get(d_url)
-            print(d_url, d_path)
-            if r.status_code == 200:
-                with open(d_path, 'wb') as f:
-                    f.write(r.content)
+            for times in range(10):
+                r = requests.get(d_url)
+                print(d_url, d_path)
+                if r.status_code == 200:
+                    with open(d_path, 'wb') as f:
+                        f.write(r.content)
+                    break
+                else:
+                    print('[{}] Picture Download Retry: {}'.format(r.status_code, times+1))
 
         reg = r'(.*\/)\d*\.(.*)'
         url = '{}1/'.format(url)
