@@ -5,4 +5,10 @@
 Download bonbon information and picture
 
 # 功能
-下載
+下載本本和本本資訊
+
+# 需求
+  - Python3
+```sh
+pip3 install beautifulsoup4 PYyaml requests
+```
