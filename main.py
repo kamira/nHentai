@@ -4,120 +4,90 @@ from bs4 import BeautifulSoup
 import yaml
 import os
 import re
+import logging
 from multiprocessing import Pool
 import random
-
-START_ID = 1
-END_ID = 100
-PATH = ''
-FILE_EXT = ['png', 'jpg', 'jpeg', 'bmp']
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if PATH == '':
-    path = os.path.join(current_dir, 'downloader')
-else:
-    path = PATH
-base_url = "https://nhentai.net/g"
+from tkinter import *
+from tkinter.scrolledtext import ScrolledText
+from downloader import download_start
+from functools import partial
 
 
-class Info:
-    def __init__(self, id):
-        self.id = id
-        self.url = '{}/{}/'.format(base_url, id)
-        i = 0
-        while True:
-            i = i + 1
-            r = requests.get(self.url)
-            if r.status_code == 200:
-                break
-            else:
-                print('[{}] Bonbon information Retry: {}'.format(r.status_code, i+1))
-        soup = BeautifulSoup(r.text, "html.parser")
-        info_block = soup.find(id="info")
-        title = info_block.find('h1')
-        self.eng_title = title.get_text()
-        title = info_block.find('h2')
-        self.raw_title = title.find(text=True, recursive=False).strip()
-        # print(self.raw_title)
-        tag_all = info_block.find_all('div', class_='tag-container')
-        self.tag_dict = {}
-        self.page = len(soup.find_all('a', class_='gallerythumb'))
-        for i in range(len(tag_all)):
-            x = tag_all[i].find(text=True, recursive=False).strip().replace(':', "")
-            sub_tag = tag_all[i].find_all("a")
-            y = [j.find(text=True, recursive=False).strip() for j in sub_tag]
-            self.tag_dict[x] = y
-
-    def render_info(self):
-        info_block = {
-            "id": self.id,
-            "url": self.url,
-            "eng_title": self.eng_title,
-            "raw_title": self.raw_title,
-            "category": self.tag_dict,
-            "page": self.page
-        }
-        return info_block
+class Window(Frame):
+    def __init__(self, master = None):
+        Frame.__init__(self, master)
+        self.master = master
 
 
-def get_info_job(i):
 
-    def picture_download_job(url, file_path, page):
+class WidgetLogger(logging.Handler):
+    def __init__(self, widget):
+        logging.Handler.__init__(self)
+        self.widget = widget
 
-        def download(d_path, d_url):
-            times = 0
-            while True:
-                times = times + 1
+    def emit(self, record):
+        # Append message (record) to the widget
+        self.widget.insert(END, record + '\n')
+        self.widget.update()
 
-                if times % 10 == 0:
-                    raw_url = re.match(r'(.*)\.\w$', d_url)
-                    d_url = '{}.{}'.format(raw_url.group(1), random.choice(FILE_EXT))
-                r = requests.get(d_url)
-                print(d_url, d_path)
-                if r.status_code == 200:
-                    with open(d_path, 'wb') as f:
-                        f.write(r.content)
-                    break
-                else:
-                    print('[{}] Picture Download Retry: {}'.format(r.status_code, times+1))
-
-        reg = r'(.*\/)\d*\.(.*)'
-        url = '{}1/'.format(url)
-        r = requests.get(url)
-        soup = BeautifulSoup(r.text, "html.parser")
-        p = soup.find('section', id='image-container')
-        p = p.find('img').attrs['src']
-        picture = re.match(reg, p)
-        # pool2 = Pool(2)
-        for i in range(1, page + 1):
-            pic_path = os.path.join(file_path, '{}.{}'.format(i, picture.group(2)))
-            pic_url = '{}{}.{}'.format(picture.group(1), i, picture.group(2))
-            download(pic_path, pic_url)
-        #     pool2.apply(download, (pic_path, pic_url,))
-        # pool2.close()
-        # pool2.join()
-
-
-    x = Info(i)
-    current_path = os.path.join(path, str(i))
-    tmp = x.render_info()
-    if not os.path.exists(current_path):
-        os.makedirs(current_path)
-    with open(os.path.join(current_path, 'info.yaml'), 'w', encoding='utf-8') as f:
-        yaml.dump(tmp, f, allow_unicode=True)
-    print(tmp['raw_title'])
-    picture_download_job(tmp['url'], current_path, tmp['page'])
 
 
 def main():
-    pool = Pool()
-    for i in range(START_ID, END_ID+1):
-        try:
-            pool.apply_async(get_info_job, (i,))
-        except Exception:
-            continue
-    pool.close()
-    pool.join()
+    def download_button_click():
+        end = end_value.get()
+        start = start_value.get()
+        path = path_value.get()
+        if end.isdigit() and start.isdigit():
+            end = int(end)
+            start = int(start)
+            if end > start:
+                sct.emit("Information------\n" +
+                                        "{:>10} : {:<5}\n".format("Start", start) +
+                                        "{:>10} : {:<5}\n".format("End", end) +
+                                        "{:>10} : {}\n".format("Path", path))
+                # print(sct)
+                download_start(start, end, path)
+                sct.emit("[Finish] {} - {} \n Filepath: {}\n".format(start, end, path))
+            else:
+                sct.emit("[ERROR] end should bigger than start\n")
+        else:
+            sct.emit("[ERROR] start or end id isn't a digital number\n")
+    root = Tk()
+    app = Window(root)
+    root.title("nHentai Downloader")
+
+    id_select_frame = Frame(root)
+    id_select_frame.grid(row=0, column=0)
+    start_label = Label(id_select_frame, text='Start')
+    start_label.grid(row=0, column=0, sticky=E, pady=2)
+    start_value = StringVar()
+    start_entry = Entry(id_select_frame, textvariable=start_value)
+    start_entry.grid(row=0, column=1)
+
+    end_label = Label(id_select_frame, text='End')
+    end_label.grid(row=1, column=0, sticky=E, pady=2)
+    end_value = StringVar()
+    end_entry = Entry(id_select_frame, textvariable=end_value)
+    end_entry.grid(row=1, column=1)
+    path_label = Label(id_select_frame, text='Download Path')
+    path_label.grid(row=3, column=0, columnspan=2, pady=10)
+    path_value = StringVar()
+    path_value.set(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'download'))
+    path_entry = Entry(id_select_frame, textvariable=path_value)
+    path_entry.grid(row=4, columnspan=2, sticky="WE")
+
+    start_button = Button(id_select_frame, text="Start Download", command=download_button_click)
+    start_button.grid(row=6, columnspan=2, sticky="WE", padx=10, pady=10)
+
+    log_frame = Frame(root)
+    log_frame.grid(row=0, column=1)
+    scroll_text = ScrolledText(log_frame, wrap=WORD)
+    scroll_text.grid()
+    logging.basicConfig(level=logging.INFO,
+                        format='%(levelname)s - %(message)s')
+    sct = WidgetLogger(scroll_text)
+    root.mainloop()
+    pass
 
 if __name__ == '__main__':
     main()
