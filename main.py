@@ -9,7 +9,7 @@ from multiprocessing import Pool
 import random
 from tkinter import *
 from tkinter.scrolledtext import ScrolledText
-from downloader import download_start
+from downloader_mp import download_start
 from functools import partial
 
 
