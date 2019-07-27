@@ -84,7 +84,7 @@ def get_info_job(i):
         p = p.find('img').attrs['src']
         picture = re.match(reg, p)
         # pool2 = Pool(2)
-        for i in range(page + 1):
+        for i in range(1, page + 1):
             pic_path = os.path.join(file_path, '{}.{}'.format(i, picture.group(2)))
             pic_url = '{}{}.{}'.format(picture.group(1), i, picture.group(2))
             download(pic_path, pic_url)
