@@ -53,7 +53,7 @@ class Info:
 
 def get_info_job(i, path):
 
-    def picture_download_job(url, file_path, page):
+    def picture_download_job(url, file_path, page, title):
 
         def download(d_path, d_url):
             times = 0
@@ -64,13 +64,12 @@ def get_info_job(i, path):
                     raw_url = re.match(r'(.*)\.\w$', d_url)
                     d_url = '{}.{}'.format(raw_url.group(1), random.choice(FILE_EXT))
                 r = requests.get(d_url)
-                print("[Process] Target: {} | Local File: {}".format(d_url, d_path))
                 if r.status_code == 200:
                     with open(d_path, 'wb') as f:
                         f.write(r.content)
                     break
                 else:
-                    print('[{}] Picture Download Retry: {}\n'.format(r.status_code, times+1))
+                    print('[ERROR] {} - Picture Download Retry: {}\n'.format(r.status_code, times+1))
 
         reg = r'(.*\/)\d*\.(.*)'
         url = '{}1/'.format(url)
@@ -84,7 +83,7 @@ def get_info_job(i, path):
             pic_path = os.path.join(file_path, '{}.{}'.format(i, picture.group(2)))
             pic_url = '{}{}.{}'.format(picture.group(1), i, picture.group(2))
             download(pic_path, pic_url)
-            print("[Progress] Download: {}/{}".format(i, page+1))
+            print("[Progress] {} | Download: {}/{}".format(i, title, page+1))
         #     pool2.apply(download, (pic_path, pic_url,))
         # pool2.close()
         # pool2.join()
@@ -98,14 +97,13 @@ def get_info_job(i, path):
     with open(os.path.join(current_path, 'info.yaml'), 'w', encoding='utf-8') as f:
         yaml.dump(tmp, f, allow_unicode=True)
         print("[Progess] {}".format(tmp['raw_title']))
-    picture_download_job(tmp['url'], current_path, tmp['page'])
+    picture_download_job(tmp['url'], current_path, tmp['page'], tmp['raw_title'])
     print("[Finished] {}".format(tmp['raw_title']))
 
 
 def download_start(start_id, end_id, path):
 
-    if not os.path.exists(path):
-        os.makedirs(path)
+
 
     pool = Pool()
     for i in range(start_id, end_id+1):
@@ -137,8 +135,10 @@ def main():
     print("預設儲存路徑為 {}".format(current_dir))
     path_input = input("請輸入新的儲存路徑，不輸入則使用預設路徑:")
     if path_input == "":
-        path = path_input
-    download_start(start, end, path)
+        path_input = current_dir
+        if not os.path.exists(path_input):
+            os.makedirs(path_input)
+    download_start(start, end, path_input)
 
 
 if __name__ == '__main__':
