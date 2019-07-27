@@ -7,27 +7,33 @@ import re
 from multiprocessing import Pool
 from multiprocessing import freeze_support
 import random
+import time
+from multiprocessing.pool import ThreadPool
 
 FILE_EXT = ['png', 'jpg', 'jpeg', 'bmp']
 base_url = "https://nhentai.net/g"
 
+url_list = []
+
 
 class Info:
-    def __init__(self, id):
+    def __init__(self, id, retry):
         self.id = id
         self.url = '{}/{}/'.format(base_url, id)
         i = 0
         while True:
             i = i + 1
+            time.sleep(random.choice([i for i in range(20)]))
             r = requests.get(self.url)
             if r.status_code == 200:
                 self.alive = True
                 break
             else:
                 print('[{}] Bonbon information Retry: {}'.format(r.status_code, i+1))
-            if i >= 30:
-                self.alive = False
-                break
+            if int(retry) > 0:
+                if i >= int(retry):
+                    self.alive = False
+                    break
         if self.alive:
             soup = BeautifulSoup(r.text, "html.parser")
             info_block = soup.find(id="info")
@@ -57,34 +63,32 @@ class Info:
         return info_block
 
 
-def get_info_job(i, path):
+def download(d_path, d_url, d_title, d_p, d_total):
+    # print(d_path, d_url)
+    reg_file_ext = r'(.*)\.\w*$'
+    times = 0
+    while True:
+        times = times + 1
+        if times % 5 == 0:
+            raw_url = re.match(reg_file_ext, d_url)
+            raw_path = re.match(reg_file_ext, d_path)
 
+            fileext = random.choice(FILE_EXT)
+            d_url = '{}.{}'.format(raw_url.group(1), fileext)
+            d_path = '{}.{}'.format(raw_path.group(1), fileext)
+        time.sleep(random.choice([i for i in range(20)]))
+        r = requests.get(d_url)
+        if r.status_code == 200:
+            with open(d_path, 'wb') as f:
+                f.write(r.content)
+            break
+        else:
+            print('[ERROR] {} - Picture Download Retry: {}'.format(r.status_code, times + 1))
+    print("[Progress] {} | Download: {}/{}".format(d_title, d_p, d_total))
+
+
+def get_info_job(i, path, retry):
     def picture_download_job(url, file_path, page, title):
-
-        def download(d_path, d_url):
-            reg_file_ext = r'(.*)\.\w*$'
-            times = 0
-            while True:
-                times = times + 1
-
-                if times % 5 == 0:
-                    raw_url = re.match(reg_file_ext, d_url)
-                    raw_path = re.match(reg_file_ext, d_path)
-
-                    fileext = random.choice(FILE_EXT)
-                    d_url = '{}.{}'.format(raw_url.group(1), fileext)
-                    d_path = '{}.{}'.format(raw_path.group(1), fileext)
-                r = requests.get(d_url)
-                if r.status_code == 200:
-                    with open(d_path, 'wb') as f:
-                        f.write(r.content)
-                    break
-                else:
-                    print('[ERROR] {} - Picture Download Retry: {}'.format(r.status_code, times + 1))
-                if times > 30:
-                    print('[ERROR] Too many failed, please check file is alive.')
-                    break
-
         reg = r'(.*\/)\d*\.(.*)'
         url = '{}1/'.format(url)
         r = requests.get(url)
@@ -96,14 +100,11 @@ def get_info_job(i, path):
         for i in range(1, page + 1):
             pic_path = os.path.join(file_path, '{}.{}'.format(i, picture.group(2)))
             pic_url = '{}{}.{}'.format(picture.group(1), i, picture.group(2))
-            download(pic_path, pic_url)
-            print("[Progress] {} | Download: {}/{}".format(title, i, page+1))
-        #     pool2.apply(download, (pic_path, pic_url,))
-        # pool2.close()
-        # pool2.join()
+            # pool2.apply_async(download, (pic_path, pic_url, title, i, page+1,))
+            # url_list.append((pic_path, pic_url, title, i, page+1,))
+            download(pic_path, pic_url, title, i, page)
 
-
-    x = Info(i)
+    x = Info(i, retry)
     if x.alive:
         current_path = os.path.join(path, str(i))
         tmp = x.render_info()
@@ -116,23 +117,32 @@ def get_info_job(i, path):
         print("[Finished] {}".format(tmp['raw_title']))
     print('[ERROR] {} | Alive?'.format(x.url))
 
+
 if __name__ == '__main__':
     freeze_support()
 
-    def download_start(start_id, end_id, path):
-        pool = Pool()
+    def download_start(start_id, end_id, path, ret):
+        # pool = Pool()
+        pool = ThreadPool(150)
         for i in range(start_id, end_id+1):
-            pool.apply_async(get_info_job, (i, path,))
+            pool.apply_async(get_info_job, (i, path, ret, ))
+            # get_info_job(i, path, ret)
+        # pool2.close()
+        # pool2.join()
         pool.close()
         pool.join()
+        # [pool.apply_async(download, i) for i in url_list]
+
 
 
     def main():
-        print("nHentai 陽春下載器\n/_/_/_/_/_/_/_/_/_/_/_\n")
+        print("nHentai 陽春下載器\n/_/_/_/_/_/_/_/_/_/_/_")
         print("ID 範例為: https://nhentai/g/****/\n米字部分即為ID\n")
         start = ""
         end = ""
+        ret = ""
         current_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'download')
+
         while not start.isdigit():
             start = input("請輸入起始的ID:")
             if start.isdigit():
@@ -153,6 +163,16 @@ if __name__ == '__main__':
             path_input = current_dir
             if not os.path.exists(path_input):
                 os.makedirs(path_input)
-        download_start(start, end, path_input)
+        while not ret.isdigit():
+            ret = input("可接受本子重試次數(0為無限):")
+            if ret == "":
+                ret = "0"
+            if ret.isdigit():
+                ret = int(ret)
+                break
+            else:
+                print('請輸入數字，ID為一串數字')
+
+        download_start(start, end, path_input, ret)
 
     main()
