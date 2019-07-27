@@ -7,7 +7,7 @@ import re
 from multiprocessing import Pool
 
 START_ID = 1
-END_ID = 2000
+END_ID = 100
 PATH = ''
 
 
@@ -23,7 +23,9 @@ class Info:
     def __init__(self, id):
         self.id = id
         self.url = '{}/{}/'.format(base_url, id)
-        for i in range(5):
+        i = 0
+        while True:
+            i = i + 1
             r = requests.get(self.url)
             if r.status_code == 200:
                 break
@@ -62,7 +64,9 @@ def get_info_job(i):
     def picture_download_job(url, file_path, page):
 
         def download(d_path, d_url):
-            for times in range(10):
+            times = 0
+            while True:
+                times = times + 1
                 r = requests.get(d_url)
                 print(d_url, d_path)
                 if r.status_code == 200:
