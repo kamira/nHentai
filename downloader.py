@@ -6,13 +6,10 @@ import os
 import re
 from multiprocessing import Pool
 import random
-import logging
 
 FILE_EXT = ['png', 'jpg', 'jpeg', 'bmp']
 base_url = "https://nhentai.net/g"
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(levelname)s - %(message)s')
 
 class Info:
     def __init__(self, id):
@@ -67,13 +64,13 @@ def get_info_job(i, path):
                     raw_url = re.match(r'(.*)\.\w$', d_url)
                     d_url = '{}.{}'.format(raw_url.group(1), random.choice(FILE_EXT))
                 r = requests.get(d_url)
-                logging.info("[Process] Target: {} | Local File: {}".format(d_url, d_path))
+                print("[Process] Target: {} | Local File: {}".format(d_url, d_path))
                 if r.status_code == 200:
                     with open(d_path, 'wb') as f:
                         f.write(r.content)
                     break
                 else:
-                    logging.info('[{}] Picture Download Retry: {}\n'.format(r.status_code, times+1))
+                    print('[{}] Picture Download Retry: {}\n'.format(r.status_code, times+1))
 
         reg = r'(.*\/)\d*\.(.*)'
         url = '{}1/'.format(url)
@@ -87,6 +84,7 @@ def get_info_job(i, path):
             pic_path = os.path.join(file_path, '{}.{}'.format(i, picture.group(2)))
             pic_url = '{}{}.{}'.format(picture.group(1), i, picture.group(2))
             download(pic_path, pic_url)
+            print("[Progress] Download: {}/{}".format(i, page+1))
         #     pool2.apply(download, (pic_path, pic_url,))
         # pool2.close()
         # pool2.join()
@@ -99,15 +97,12 @@ def get_info_job(i, path):
         os.makedirs(current_path)
     with open(os.path.join(current_path, 'info.yaml'), 'w', encoding='utf-8') as f:
         yaml.dump(tmp, f, allow_unicode=True)
-        logging.info("[Progess] {}".format(tmp['raw_title']))
+        print("[Progess] {}".format(tmp['raw_title']))
     picture_download_job(tmp['url'], current_path, tmp['page'])
-    logging.info("[Finished] {}".format(tmp['raw_title']))
+    print("[Finished] {}".format(tmp['raw_title']))
 
 
 def download_start(start_id, end_id, path):
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    if path == '':
-        path = os.path.join(current_dir, 'download')
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -118,6 +113,33 @@ def download_start(start_id, end_id, path):
     pool.close()
     pool.join()
 
-#
-# if __name__ == '__main__':
-#     download_start(1, 1000)
+
+def main():
+    print("nHentai 陽春下載器\n/_/_/_/_/_/_/_/_/_/_/_\n")
+    print("ID 範例為: https://nhentai/g/****/\n米字部分即為ID\n")
+    start = ""
+    end = ""
+    current_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'download')
+    while not start.isdigit():
+        start = input("請輸入起始的ID:")
+        if start.isdigit():
+            start = int(start)
+            break
+        else:
+            print('請輸入數字，ID為一串數字')
+    while not end.isdigit():
+        end = input("請輸入結束的ID:")
+        if end.isdigit():
+            end = int(end)
+            break
+        else:
+            print('請輸入數字，ID為一串數字')
+    print("預設儲存路徑為 {}".format(current_dir))
+    path_input = input("請輸入新的儲存路徑，不輸入則使用預設路徑:")
+    if path_input == "":
+        path = path_input
+    download_start(start, end, path)
+
+
+if __name__ == '__main__':
+    main()
