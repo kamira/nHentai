@@ -5,11 +5,12 @@ import yaml
 import os
 import re
 from multiprocessing import Pool
+import random
 
 START_ID = 1
 END_ID = 100
 PATH = ''
-
+FILE_EXT = ['png', 'jpg', 'jpeg', 'bmp']
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if PATH == '':
@@ -67,6 +68,10 @@ def get_info_job(i):
             times = 0
             while True:
                 times = times + 1
+
+                if times % 10 == 0:
+                    raw_url = re.match(r'(.*)\.\w$', d_url)
+                    d_url = '{}.{}'.format(raw_url.group(1), random.choice(FILE_EXT))
                 r = requests.get(d_url)
                 print(d_url, d_path)
                 if r.status_code == 200:
