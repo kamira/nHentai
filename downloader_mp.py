@@ -6,7 +6,9 @@ import os
 import re
 from multiprocessing import Pool
 from multiprocessing import freeze_support
+import multiprocessing
 import random
+import datetime
 import time
 from multiprocessing.pool import ThreadPool
 
@@ -112,7 +114,7 @@ def get_info_job(i, path, retry):
             os.makedirs(current_path)
         with open(os.path.join(current_path, 'info.yaml'), 'w', encoding='utf-8') as f:
             yaml.dump(tmp, f, allow_unicode=True)
-            print("[Progess] {}".format(tmp['raw_title']))
+            print("[Progress] {}".format(tmp['raw_title']))
         picture_download_job(tmp['url'], current_path, tmp['page'], tmp['raw_title'])
         print("[Finished] {}".format(tmp['raw_title']))
     print('[ERROR] {} | Alive?'.format(x.url))
@@ -123,7 +125,7 @@ if __name__ == '__main__':
 
     def download_start(start_id, end_id, path, ret):
         # pool = Pool()
-        pool = ThreadPool(150)
+        pool = ThreadPool(multiprocessing.cpu_count() * 20)
         for i in range(start_id, end_id+1):
             pool.apply_async(get_info_job, (i, path, ret, ))
             # get_info_job(i, path, ret)
@@ -136,8 +138,13 @@ if __name__ == '__main__':
 
 
     def main():
-        print("nHentai 陽春下載器\n/_/_/_/_/_/_/_/_/_/_/_")
-        print("ID 範例為: https://nhentai/g/****/\n米字部分即為ID\n")
+        now = datetime.datetime.now()
+        print("Copyright (c) {} Harutsuki All Rights Reserved.\n".format(now.year))
+        print("nHentai 陽春下載器 v1.0\n")
+        print("Information ===========")
+        print("CPU 核心數: {}".format(multiprocessing.cpu_count()))
+        print("預計建立線程數量: {}\n".format(multiprocessing.cpu_count() * 20))
+
         start = ""
         end = ""
         ret = ""
