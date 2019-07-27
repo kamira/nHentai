@@ -5,10 +5,17 @@ import yaml
 import os
 import re
 from multiprocessing import Pool
-import time
+
+START_ID = 1
+END_ID = 2000
+PATH = ''
+
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-path = os.path.join(current_dir, 'downloader')
+if PATH == '':
+    path = os.path.join(current_dir, 'downloader')
+else:
+    path = PATH
 base_url = "https://nhentai.net/g"
 
 
@@ -95,11 +102,9 @@ def get_info_job(i):
 
 def main():
     pool = Pool()
-    for i in range(1, 1000):
+    for i in range(START_ID, END_ID+1):
         try:
             pool.apply_async(get_info_job, (i,))
-            # thread = threading.Thread(target=get_info_job, args=(i,))  # 定义线程
-            # thread.start()  # 让线程开始工作
         except Exception:
             continue
     pool.close()
