@@ -7,7 +7,11 @@ Download bonbon information and picture
 # 功能
 下載本本和本本資訊
 
-# 需求
+# Build 資訊
+  - 放置於output資料夾裡
+  - 線程會開150個，有可能會使CPU使用率接近100%
+
+# Source 需求
   - Python3
 ```sh
 pip3 install beautifulsoup4 PYyaml requests
