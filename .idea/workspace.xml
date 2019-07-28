@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="83441e0a-f1f8-4f54-94a2-61fbcd521fc4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/downloader_mp_with_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/downloader_mp_with_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/downloader_mp_with_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output/nHentai_Download.exe" beforeDir="false" afterPath="$PROJECT_DIR$/output/nHentai_Download.exe" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,19 +46,19 @@
         <counts>
           <entry key="dummy" value="4" />
           <entry key="gitignore" value="1" />
-          <entry key="py" value="13088" />
+          <entry key="py" value="13159" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="5" />
-          <entry key="Python" value="13088" />
+          <entry key="Python" value="13159" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.41763192">
+    <splitter split-orientation="horizontal" split-proportion="0.7065637">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
@@ -91,14 +90,14 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/downloader_mp_with_api.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="503">
-                  <caret line="134" column="43" lean-forward="true" selection-start-line="134" selection-start-column="43" selection-end-line="134" selection-end-column="43" />
+                <state relative-caret-position="398">
+                  <caret line="108" column="35" lean-forward="true" selection-start-line="108" selection-start-column="35" selection-end-line="108" selection-end-column="35" />
                   <folding>
                     <element signature="e#24#39#0" expanded="true" />
                     <element signature="e#2552#2673#0" />
                     <element signature="e#2553#2682#0" />
-                    <marker date="1564316783819" expanded="true" signature="4023:4628" ph="..." />
-                    <marker date="1564316783819" expanded="true" signature="4750:5443" ph="..." />
+                    <marker date="1564317399014" expanded="true" signature="3904:4509" ph="..." />
+                    <marker date="1564317399014" expanded="true" signature="4631:5380" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -123,7 +122,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/downloader_mp.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="388">
+                <state relative-caret-position="-809">
                   <caret line="111" column="37" selection-start-line="111" selection-start-column="8" selection-end-line="111" selection-end-column="37" />
                   <folding>
                     <element signature="e#24#39#0" expanded="true" />
@@ -151,9 +150,10 @@
       <find>logging.info</find>
       <find>logging</find>
       <find>group</find>
-      <find>print</find>
       <find>open</find>
       <find>Download</find>
+      <find>print</find>
+      <find>{:&gt;100}</find>
     </findStrings>
     <replaceStrings>
       <replace>sct.emit</replace>
@@ -448,14 +448,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/downloader_mp_with_api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="503">
-          <caret line="134" column="43" lean-forward="true" selection-start-line="134" selection-start-column="43" selection-end-line="134" selection-end-column="43" />
+        <state relative-caret-position="398">
+          <caret line="108" column="35" lean-forward="true" selection-start-line="108" selection-start-column="35" selection-end-line="108" selection-end-column="35" />
           <folding>
             <element signature="e#24#39#0" expanded="true" />
             <element signature="e#2552#2673#0" />
             <element signature="e#2553#2682#0" />
-            <marker date="1564316783819" expanded="true" signature="4023:4628" ph="..." />
-            <marker date="1564316783819" expanded="true" signature="4750:5443" ph="..." />
+            <marker date="1564317399014" expanded="true" signature="3904:4509" ph="..." />
+            <marker date="1564317399014" expanded="true" signature="4631:5380" ph="..." />
           </folding>
         </state>
       </provider>

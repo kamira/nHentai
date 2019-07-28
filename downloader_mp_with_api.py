@@ -35,27 +35,26 @@ class nHentaiInfo:
             # print(api_url)
             r = requests.get(api_url, headers=headers)
             r.encoding = 'utf-8'
+            if r.status_code == 403:
+                self.alive = False
+                break
             if r.status_code == 200:
+                self.alive = True
                 data = r.json()
-                if "error" in data:
-                    if data['error']:
-                        self.alive = False
-                        break
-                else:
-                    # Title
-                    self.title = data['title']
-                    # Tag
-                    self.tag_dict = {}
-                    for tag_item in data['tags']:
-                        if tag_item['type'] in self.tag_dict:
-                            self.tag_dict[tag_item['type']].append(tag_item['name'])
-                        else:
-                            self.tag_dict[tag_item['type']] = [tag_item['name']]
-                    # Page Size
-                    self.pages = data['num_pages']
-                    self.pages_infomation = data['images']['pages']
-                    # Media ID
-                    self.media_id = data['media_id']
+                # Title
+                self.title = data['title']
+                # Tag
+                self.tag_dict = {}
+                for tag_item in data['tags']:
+                    if tag_item['type'] in self.tag_dict:
+                        self.tag_dict[tag_item['type']].append(tag_item['name'])
+                    else:
+                        self.tag_dict[tag_item['type']] = [tag_item['name']]
+                # Page Size
+                self.pages = data['num_pages']
+                self.pages_infomation = data['images']['pages']
+                # Media ID
+                self.media_id = data['media_id']
                 break
 
     def get_media_list(self):
@@ -92,7 +91,7 @@ def save_infomation_file(file_type, raw, path):
     if file_type == "yaml":
         with open(os.path.join(path, 'info.yaml'), 'w', encoding='utf-8') as f:
             yaml.dump(raw, f, allow_unicode=True)
-    print("{:>10} {:>5} {:>100} {:>10} {:>10}".format("[information]", raw['id'], raw['title']['japanese'], "information", "saved"))
+    print("{:>10} {:>5} {:<100} {:>10} {:>10}".format("[information]", raw['id'], raw['title']['japanese'], "information", "saved"))
     return True
 
 
@@ -104,7 +103,7 @@ def download_pic(d_path, d_name, target_id, title, page_no, page_total):
         'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6',
     }
     if os.path.exists(d_name):
-        print("{:>10} {:>5} {:>100} {:>10} {:>10}".format("[information]", target_id, title,
+        print("{:>10} {:>5} {:<100} {:>10} {:>10}".format("[information]", target_id, title,
                                                           "pass", page))
         return True
     while True:
@@ -113,11 +112,11 @@ def download_pic(d_path, d_name, target_id, title, page_no, page_total):
         if r.status_code == 200:
             with open(d_name, 'wb') as f:
                 f.write(r.content)
-            print("{:>10} {:>5} {:>100} {:>10} {:>10}".format("[information]", target_id, title,
+            print("{:>10} {:>5} {:<100} {:>10} {:>10}".format("[information]", target_id, title,
                                                              "saved", page))
             break
         else:
-            print("{:>10} {:>5} {:>100} {:>10} {:>10}".format("[error]", target_id, title,
+            print("{:>10} {:>5} {:<100} {:>10} {:>10}".format("[error]", target_id, title,
                                                              "retry", page))
     return True
     # except Exception as e:
@@ -130,14 +129,15 @@ if __name__ == '__main__':
         pool = ThreadPool(pool_size)
         for i in range(start_id, end_id+1):
             s = nHentaiInfo(i)
-            information = s.get_information()
-            new_path = os.path.join(path, str(i))
-            media_list = s.get_media_list()
-            for j in media_list:
-                pic_new_path = os.path.join(new_path, j['target'])
-                # print(j['source'])
-                pool.apply_async(download_pic, (j['source'], pic_new_path, information['id'], information['title']['japanese'], j['page_no'], information['page'],))
-            pool.apply_async(save_infomation_file, (file_typename, information, new_path,))
+            if s.alive:
+                information = s.get_information()
+                new_path = os.path.join(path, str(i))
+                media_list = s.get_media_list()
+                for j in media_list:
+                    pic_new_path = os.path.join(new_path, j['target'])
+                    # print(j['source'])
+                    pool.apply_async(download_pic, (j['source'], pic_new_path, information['id'], information['title']['japanese'], j['page_no'], information['page'],))
+                pool.apply_async(save_infomation_file, (file_typename, information, new_path,))
         pool.close()
         pool.join()
 
