@@ -31,7 +31,7 @@ class Info:
                 self.alive = True
                 break
             else:
-                print('[{}] Bonbon information Retry: {}'.format(r.status_code, i+1))
+                print('[ERROR] {} - Bonbon information Retry: {}'.format(r.status_code, i+1))
             if int(retry) > 0:
                 if i >= int(retry):
                     self.alive = False
@@ -90,7 +90,7 @@ def download(d_path, d_url, d_title, d_p, d_total):
 
 
 def get_info_job(i, path, retry):
-    def picture_download_job(url, file_path, page, title):
+    def picture_download_job(url, file_path, start_page, page, title):
         reg = r'(.*\/)\d*\.(.*)'
         url = '{}1/'.format(url)
         r = requests.get(url)
@@ -99,23 +99,53 @@ def get_info_job(i, path, retry):
         p = p.find('img').attrs['src']
         picture = re.match(reg, p)
         # pool2 = Pool(2)
-        for i in range(1, page + 1):
+        for i in range(start_page, page + 1):
             pic_path = os.path.join(file_path, '{}.{}'.format(i, picture.group(2)))
             pic_url = '{}{}.{}'.format(picture.group(1), i, picture.group(2))
             # pool2.apply_async(download, (pic_path, pic_url, title, i, page+1,))
             # url_list.append((pic_path, pic_url, title, i, page+1,))
             download(pic_path, pic_url, title, i, page)
 
+    current_path = os.path.join(path, str(i))
+    info_path = os.path.join(current_path, 'info.yaml')
+    pic_list = 0
+    try:
+        if os.path.exists(info_path):
+            with open(info_path, 'r', encoding='utf-8') as stream:
+                try:
+                    bonbon_info = yaml.safe_load(stream)
+                except yaml.YAMLError as exc:
+                    print(exc)
+            bonbon_page = bonbon_info['page']
+            for file in os.listdir(current_path):
+                if file.endswith(".jpg"):
+                    pic_list = pic_list + 1
+                    continue
+                if file.endswith(".jpeg"):
+                    pic_list = pic_list + 1
+                    continue
+                if file.endswith(".png"):
+                    pic_list = pic_list + 1
+                    continue
+                if file.endswith(".bmp"):
+                    pic_list = pic_list + 1
+                    continue
+
+            print('[INFORMATION] {} | {} {}/{}'.format(bonbon_info['id'], bonbon_info['raw_title'], pic_list,bonbon_page))
+            if bonbon_page <= pic_list:
+                return True
+    except:
+        pass
     x = Info(i, retry)
     if x.alive:
-        current_path = os.path.join(path, str(i))
+
         tmp = x.render_info()
         if not os.path.exists(current_path):
             os.makedirs(current_path)
         with open(os.path.join(current_path, 'info.yaml'), 'w', encoding='utf-8') as f:
             yaml.dump(tmp, f, allow_unicode=True)
             print("[Progress] {}".format(tmp['raw_title']))
-        picture_download_job(tmp['url'], current_path, tmp['page'], tmp['raw_title'])
+        picture_download_job(tmp['url'], current_path, pic_list, tmp['page'], tmp['raw_title'])
         print("[Finished] {}".format(tmp['raw_title']))
     print('[ERROR] {} | Alive?'.format(x.url))
 
@@ -140,7 +170,7 @@ if __name__ == '__main__':
     def main():
         now = datetime.datetime.now()
         print("Copyright (c) {} Harutsuki All Rights Reserved.\n".format(now.year))
-        print("nHentai 陽春下載器 v1.0\n")
+        print("nHentai 陽春下載器 v1.1\n")
         print("Information ===========")
         print("CPU 核心數: {}".format(multiprocessing.cpu_count()))
         print("預計建立線程數量: {}\n".format(multiprocessing.cpu_count() * 20))
