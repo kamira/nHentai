@@ -17,7 +17,6 @@ base_url = "https://nhentai.net/g"
 
 url_list = []
 
-
 class Info:
     def __init__(self, id, retry):
         self.id = id
@@ -31,7 +30,7 @@ class Info:
                 self.alive = True
                 break
             else:
-                print('[ERROR] {} - Bonbon information Retry: {}'.format(r.status_code, i+1))
+                print('[   ERROR] {} - Bonbon information Retry: {}'.format(r.status_code, i+1))
             if int(retry) > 0:
                 if i >= int(retry):
                     self.alive = False
@@ -85,7 +84,7 @@ def download(d_path, d_url, d_title, d_p, d_total):
                 f.write(r.content)
             break
         else:
-            print('[ERROR] {} - Picture Download Retry: {}'.format(r.status_code, times + 1))
+            print('[   ERROR] {} - Picture Download Retry: {}'.format(r.status_code, times + 1))
     print("[Progress] {} | Download: {}/{}".format(d_title, d_p, d_total))
 
 
@@ -99,7 +98,7 @@ def get_info_job(i, path, retry):
         p = p.find('img').attrs['src']
         picture = re.match(reg, p)
         # pool2 = Pool(2)
-        for i in range(start_page, page + 1):
+        for i in range(start_page + 1, page + 1):
             pic_path = os.path.join(file_path, '{}.{}'.format(i, picture.group(2)))
             pic_url = '{}{}.{}'.format(picture.group(1), i, picture.group(2))
             # pool2.apply_async(download, (pic_path, pic_url, title, i, page+1,))
@@ -114,7 +113,7 @@ def get_info_job(i, path, retry):
             with open(info_path, 'r', encoding='utf-8') as stream:
                 try:
                     bonbon_info = yaml.safe_load(stream)
-                except yaml.YAMLError as exc:
+                except yaml.YAMLERROR as exc:
                     print(exc)
             bonbon_page = bonbon_info['page']
             for file in os.listdir(current_path):
@@ -144,18 +143,19 @@ def get_info_job(i, path, retry):
             os.makedirs(current_path)
         with open(os.path.join(current_path, 'info.yaml'), 'w', encoding='utf-8') as f:
             yaml.dump(tmp, f, allow_unicode=True)
-            print("[Progress] {}".format(tmp['raw_title']))
+            print("[Progress] {} | {}".format(i, tmp['raw_title']))
         picture_download_job(tmp['url'], current_path, pic_list, tmp['page'], tmp['raw_title'])
-        print("[Finished] {}".format(tmp['raw_title']))
-    print('[ERROR] {} | Alive?'.format(x.url))
+        print("[Finished] {} | {}".format(i, tmp['raw_title']))
+    print('[   ERROR] {} | Alive?'.format(x.url))
 
 
 if __name__ == '__main__':
+
     freeze_support()
 
-    def download_start(start_id, end_id, path, ret):
+    def download_start(start_id, end_id, path, ret, threadpool_size):
         # pool = Pool()
-        pool = ThreadPool(multiprocessing.cpu_count() * 20)
+        pool = ThreadPool(multiprocessing.cpu_count() * threadpool_size)
         for i in range(start_id, end_id+1):
             pool.apply_async(get_info_job, (i, path, ret, ))
             # get_info_job(i, path, ret)
@@ -166,14 +166,24 @@ if __name__ == '__main__':
         # [pool.apply_async(download, i) for i in url_list]
 
 
-
     def main():
+        threadpool_size = 10
         now = datetime.datetime.now()
         print("Copyright (c) {} Harutsuki All Rights Reserved.\n".format(now.year))
-        print("nHentai 陽春下載器 v1.1\n")
+        print("nHentai 陽春下載器 v1.2\n")
         print("Information ===========")
         print("CPU 核心數: {}".format(multiprocessing.cpu_count()))
-        print("預計建立線程數量: {}\n".format(multiprocessing.cpu_count() * 20))
+        print("預計建立線程數量: {}\n".format(multiprocessing.cpu_count() * threadpool_size))
+        thread_size = ""
+        while not thread_size.isdigit():
+            thread_size = input("更改每個CPU的線程數量:")
+            if thread_size == "":
+                break
+            if thread_size.isdigit():
+                threadpool_size = int(thread_size)
+                break
+            else:
+                print('請輸入數字')
 
         start = ""
         end = ""
@@ -210,6 +220,6 @@ if __name__ == '__main__':
             else:
                 print('請輸入數字，ID為一串數字')
 
-        download_start(start, end, path_input, ret)
+        download_start(start, end, path_input, ret, threadpool_size)
 
     main()
