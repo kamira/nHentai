@@ -58,7 +58,7 @@ class nHentaiInfo:
                 break
 
     def get_media_list(self):
-        file_ext_mapping_list = {"j": "jpg", "p": "png"}
+        file_ext_mapping_list = {"j": "jpg", "p": "png", "g": "gif"}
         media_list = []
         for i in range(len(self.pages_infomation)):
             file_ext = file_ext_mapping_list[self.pages_infomation[i]['t']]
@@ -145,7 +145,7 @@ if __name__ == '__main__':
         threadpool_size = multiprocessing.cpu_count()
         now = datetime.datetime.now()
         print("Copyright (c) {} Harutsuki All Rights Reserved.\n".format(now.year))
-        print("{:^40}".format("nHentai 陽春下載器 v1.4\n"))
+        print("{:^40}".format("nHentai 陽春下載器 v1.4.1\n"))
         print("{:^40}".format("============ Information ==========="))
         print("{:>30} : {}".format("CPU Core", multiprocessing.cpu_count()))
         print("{:>30} : {}\n".format("Default threads setting", threadpool_size))
