@@ -9,7 +9,7 @@ Download bonbon information and picture
 
 # Build 資訊
   - 放置於output資料夾裡
-  - 線程會開150個，有可能會使CPU使用率接近100%
+  - 線程會開約150個(實際情況依照CPU核心數增減)，有可能會使CPU使用率接近100%
 
 # Source 需求
   - Python3
