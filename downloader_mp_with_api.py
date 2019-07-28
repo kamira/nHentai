@@ -58,7 +58,7 @@ class nHentaiInfo:
                 break
 
     def get_media_list(self):
-        file_ext_mapping_list = {"j": "jpg", "p": "png", "g": "gif"}
+        file_ext_mapping_list = {"j": "jpg", "p": "png", "g": "gif", "b": "bmp", "s": "svg", "a": "apng", "m": "mp4"}
         media_list = []
         for i in range(len(self.pages_infomation)):
             file_ext = file_ext_mapping_list[self.pages_infomation[i]['t']]
@@ -91,7 +91,7 @@ def save_infomation_file(file_type, raw, path):
     if file_type == "yaml":
         with open(os.path.join(path, 'info.yaml'), 'w', encoding='utf-8') as f:
             yaml.dump(raw, f, allow_unicode=True)
-    print("{:>10} {:>5} {:<100} {:>10} {:>10}".format("[information]", raw['id'], raw['title']['japanese'], "information", "saved"))
+    print("{:>10} {:>5} {:<50} {:>10} {:>10}".format("[information]", raw['id'], raw['title']['japanese'], "information", "saved"))
     return True
 
 
@@ -103,7 +103,7 @@ def download_pic(d_path, d_name, target_id, title, page_no, page_total):
         'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6',
     }
     if os.path.exists(d_name):
-        print("{:>10} {:>5} {:<100} {:>10} {:>10}".format("[information]", target_id, title,
+        print("{:>10} {:>5} {:<50} {:>10} {:>10}".format("[information]", target_id, title,
                                                           "pass", page))
         return True
     while True:
@@ -112,11 +112,11 @@ def download_pic(d_path, d_name, target_id, title, page_no, page_total):
         if r.status_code == 200:
             with open(d_name, 'wb') as f:
                 f.write(r.content)
-            print("{:>10} {:>5} {:<100} {:>10} {:>10}".format("[information]", target_id, title,
+            print("{:>10} {:>5} {:<50} {:>10} {:>10}".format("[information]", target_id, title,
                                                              "saved", page))
             break
         else:
-            print("{:>10} {:>5} {:<100} {:>10} {:>10}".format("[error]", target_id, title,
+            print("{:>10} {:>5} {:<50} {:>10} {:>10}".format("[error]", target_id, title,
                                                              "retry", page))
     return True
     # except Exception as e:
@@ -145,7 +145,7 @@ if __name__ == '__main__':
         threadpool_size = multiprocessing.cpu_count()
         now = datetime.datetime.now()
         print("Copyright (c) {} Harutsuki All Rights Reserved.\n".format(now.year))
-        print("{:^40}".format("nHentai 陽春下載器 v1.4.1\n"))
+        print("{:^40}".format("nHentai 陽春下載器 v1.4.2\n"))
         print("{:^40}".format("============ Information ==========="))
         print("{:>30} : {}".format("CPU Core", multiprocessing.cpu_count()))
         print("{:>30} : {}\n".format("Default threads setting", threadpool_size))
