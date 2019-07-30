@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="83441e0a-f1f8-4f54-94a2-61fbcd521fc4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/download.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hentai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/downloader_mp_with_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/downloader_mp_with_api.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,11 +19,12 @@
         <counts>
           <entry key="project.closed" value="6" />
           <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="3" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -29,7 +33,7 @@
           <entry key="gitignore" value="1" />
           <entry key="jpg" value="1" />
           <entry key="json" value="1" />
-          <entry key="py" value="7" />
+          <entry key="py" value="9" />
           <entry key="yaml" value="9" />
         </counts>
       </usages-collector>
@@ -38,7 +42,7 @@
           <entry key="Image" value="1" />
           <entry key="JSON" value="1" />
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="7" />
+          <entry key="Python" value="9" />
           <entry key="YAML" value="9" />
         </counts>
       </usages-collector>
@@ -46,19 +50,19 @@
         <counts>
           <entry key="dummy" value="4" />
           <entry key="gitignore" value="1" />
-          <entry key="py" value="13211" />
+          <entry key="py" value="17698" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="5" />
-          <entry key="Python" value="13211" />
+          <entry key="Python" value="17698" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.7065637">
+    <splitter split-orientation="horizontal" split-proportion="0.10069226">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
@@ -90,10 +94,10 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/downloader_mp_with_api.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="208">
-                  <caret line="60" column="99" lean-forward="true" selection-start-line="60" selection-start-column="99" selection-end-line="60" selection-end-column="103" />
+                <state relative-caret-position="55">
+                  <caret line="9" selection-start-line="9" selection-end-line="9" selection-end-column="22" />
                   <folding>
-                    <element signature="e#24#39#0" expanded="true" />
+                    <element signature="e#325#2775#0" />
                   </folding>
                 </state>
               </provider>
@@ -115,13 +119,28 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/downloader_mp.py">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/hentai.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="19">
-                  <caret line="111" column="37" selection-start-line="111" selection-start-column="8" selection-end-line="111" selection-end-column="37" />
+                <state relative-caret-position="500">
+                  <caret line="81" column="30" selection-start-line="81" selection-start-column="30" selection-end-line="81" selection-end-column="30" />
                   <folding>
-                    <element signature="e#24#39#0" expanded="true" />
+                    <element signature="e#0#15#0" expanded="true" />
+                    <marker date="1564501569470" expanded="true" signature="494:499" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/download.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="341">
+                  <caret line="100" column="55" lean-forward="true" selection-start-line="100" selection-start-column="55" selection-end-line="100" selection-end-column="55" />
+                  <folding>
+                    <element signature="e#0#11#0" expanded="true" />
+                    <marker date="1564501692481" expanded="true" signature="1556:1562" ph="..." />
+                    <marker date="1564501692481" expanded="true" signature="3050:3262" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -168,12 +187,14 @@
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/downloader_mp.py" />
         <option value="$PROJECT_DIR$/downloader_mp_with_api.py" />
+        <option value="$PROJECT_DIR$/hentai.py" />
+        <option value="$PROJECT_DIR$/download.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="142" />
-    <option name="y" value="238" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-59" />
+    <option name="y" value="-25" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
@@ -183,7 +204,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -195,6 +215,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -217,8 +238,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.downloader_mp_with_api">
-    <configuration name="downloader" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.download">
+    <configuration name="download" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="nHentai" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -230,7 +251,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\Harutsuki\PycharmProjects\nHentai\downloader_mp.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/download.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -324,19 +345,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.downloader" />
       <item itemvalue="Python.downloader_loop" />
       <item itemvalue="Python.downloader_mp" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.downloader_mp_with_api" />
+      <item itemvalue="Python.download" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.download" />
         <item itemvalue="Python.downloader_mp_with_api" />
         <item itemvalue="Python.downloader_mp" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.downloader_loop" />
-        <item itemvalue="Python.downloader" />
       </list>
     </recent_temporary>
   </component>
@@ -363,23 +384,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-93" y="211" width="1936" height="1056" extended-state="0" />
+    <frame x="-8" y="32" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18124342" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16227607" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.84404635" weight="0.5222584" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8435195" visible="true" weight="0.39087948" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32899022" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49683878" visible="true" weight="0.19978285" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4963119" weight="0.19978285" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.32899022" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50316125" side_tool="true" visible="true" weight="0.19978285" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.1564805" side_tool="true" visible="true" weight="0.39087948" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -442,10 +463,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/downloader_mp_with_api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="60" column="99" lean-forward="true" selection-start-line="60" selection-start-column="99" selection-end-line="60" selection-end-column="103" />
+        <state relative-caret-position="55">
+          <caret line="9" selection-start-line="9" selection-end-line="9" selection-end-column="22" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#325#2775#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hentai.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="81" column="30" selection-start-line="81" selection-start-column="30" selection-end-line="81" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1564501569470" expanded="true" signature="494:499" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/download.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="100" column="55" lean-forward="true" selection-start-line="100" selection-start-column="55" selection-end-line="100" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <marker date="1564501692481" expanded="true" signature="1556:1562" ph="..." />
+            <marker date="1564501692481" expanded="true" signature="3050:3262" ph="..." />
           </folding>
         </state>
       </provider>
